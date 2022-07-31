@@ -7,7 +7,8 @@ function Form() {
   const [min, setMin] = useState();
   const [max, setMax] = useState();
   const [name, setName] = useState();
-  const itemsLocal = JSON.parse(localStorage.getItem('items')) || [];
+  const [itemsLocalStorage, setItemsLocalStorage] = useState(JSON.parse(localStorage.getItem('items')) || []);
+
   const navigate = useNavigate();
 
   const onSubmit = () => {
@@ -21,6 +22,12 @@ function Form() {
     }
     navigate('/home', {state: {quantity, min, max, name}});
   }
+
+  const onClickClearHistory = () => {
+    localStorage.removeItem("items");
+    setItemsLocalStorage([]);
+  };
+
   return (
     <div className="mt-5">
       <div className="form-group row mb-2">
@@ -51,9 +58,10 @@ function Form() {
         </div>
       </div>
       <div className="form-group row d-flex justify-content-center">
-        <button className="btn btn-primary col-2 offset-2" onClick={onSubmit}>Random</button>
+        <button className="btn btn-primary col-2 offset-2 btn-lg" onClick={onSubmit}>Random</button>
+        <button className="col-3 col-lg-2 btn btn-danger mx-2 btn-lg" onClick={onClickClearHistory}>Clear history</button>
       </div>
-      <History items={itemsLocal}/>
+      <History items={itemsLocalStorage}/>
     </div>
   )
 }

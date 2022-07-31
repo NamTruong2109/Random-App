@@ -14,7 +14,7 @@ function Home() {
   }
 
   const generateNumbers = () => {
-    if(state){
+    if (state) {
       const {quantity, min, max, name = ""} = state;
       const result = [];
       for (let i = 1; i <= quantity; i++) {
@@ -24,7 +24,7 @@ function Home() {
       setItemsLocalStorage(items);
       localStorage.setItem('items', JSON.stringify(items));
       return result;
-    }else{
+    } else {
       navigate('/', {replace: true});
     }
   };
@@ -42,16 +42,20 @@ function Home() {
   //   setNumbers(generateNumbers);
   // }, [])
 
-  return <div className="row">
-    {numbers && numbers.map((number, index) => {
-      return <div className="col-auto mt-5 mb-2" key={index}><Number number={number} key={number}/></div>
-    })}
-    <div className="row">
-      <button className="col-3 btn btn-primary mt-5" onClick={onClickRandom}>Bắt đầu</button>
-      {/*<Link className="col-3 btn btn-warning" to="/">Back</Link>*/}
-      {/*<button className="col-3 btn btn-primary mx-2" onClick={onClickRetry}>Retry</button>*/}
-      {/*<button className="col-3 btn btn-danger" onClick={onClickClearHistory}>Clear history</button>*/}
+  return <div>
+    <div className="row d-flex justify-content-center">
+      {numbers && numbers.map((number, index) => {
+        return <div className="col-auto mt-5 mb-2" key={index}><Number number={number} key={number}/></div>
+      })}
     </div>
+    {!numbers?.length &&
+      <div className="row d-flex justify-content-center">
+        <button className="col-3 btn btn-primary mt-5 btn-lg" onClick={onClickRandom}>Bắt đầu</button>
+        {/*<Link className="col-3 btn btn-warning" to="/">Back</Link>*/}
+        {/*<button className="col-3 btn btn-primary mx-2" onClick={onClickRetry}>Retry</button>*/}
+        {/*<button className="col-3 btn btn-danger" onClick={onClickClearHistory}>Clear history</button>*/}
+      </div>
+    }
     <History items={itemsLocalStorage}/>
   </div>;
 }
