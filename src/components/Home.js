@@ -7,7 +7,7 @@ function Home() {
   const {state} = useLocation();
   const navigate = useNavigate();
   const [numbers, setNumbers] = useState([]);
-  const [itemsLocalStorage, setItemsLocalStorage] = useState([]);
+  const [itemsLocalStorage, setItemsLocalStorage] = useState(JSON.parse(localStorage.getItem('items')) || []);
 
   const randomNumberInRange = (min, max) => {
     return Math.floor(Math.random() * (parseInt(max) - parseInt(min) + 1) + parseInt(min));
@@ -20,8 +20,7 @@ function Home() {
       for (let i = 1; i <= quantity; i++) {
         result.push(randomNumberInRange(min, max));
       }
-      const itemsLocal = JSON.parse(localStorage.getItem('items')) || [];
-      const items = [...itemsLocal, {name, result}];
+      const items = [{name, result}, ...itemsLocalStorage];
       setItemsLocalStorage(items);
       localStorage.setItem('items', JSON.stringify(items));
       return result;
@@ -30,27 +29,28 @@ function Home() {
     }
   };
 
-  const onClickRetry = () => {
+  const onClickRandom = () => {
     setNumbers(generateNumbers());
   }
 
-  const onClickClearHistory = () => {
-    localStorage.removeItem("items");
-    setItemsLocalStorage([]);
-  };
-
-  useEffect(() => {
-    setNumbers(generateNumbers);
-  }, [])
+  // const onClickClearHistory = () => {
+  //   localStorage.removeItem("items");
+  //   setItemsLocalStorage([]);
+  // };
+  //
+  // useEffect(() => {
+  //   setNumbers(generateNumbers);
+  // }, [])
 
   return <div className="row">
     {numbers && numbers.map((number, index) => {
       return <div className="col-auto mt-5 mb-2" key={index}><Number number={number} key={number}/></div>
     })}
     <div className="row">
-      <Link className="col-3 btn btn-warning" to="/">Back</Link>
-      <button className="col-3 btn btn-primary mx-2" onClick={onClickRetry}>Retry</button>
-      <button className="col-3 btn btn-danger" onClick={onClickClearHistory}>Clear history</button>
+      <button className="col-3 btn btn-primary mt-5" onClick={onClickRandom}>Bắt đầu</button>
+      {/*<Link className="col-3 btn btn-warning" to="/">Back</Link>*/}
+      {/*<button className="col-3 btn btn-primary mx-2" onClick={onClickRetry}>Retry</button>*/}
+      {/*<button className="col-3 btn btn-danger" onClick={onClickClearHistory}>Clear history</button>*/}
     </div>
     <History items={itemsLocalStorage}/>
   </div>;
