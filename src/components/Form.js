@@ -1,31 +1,39 @@
-import React from "react";
-import {useState} from "react";
+import React, {useState} from "react";
 import {useNavigate} from 'react-router-dom';
+import History from "./History";
 
 function Form() {
-  const [number, setNumber] = useState();
+  const [quantity, setQuantity] = useState();
   const [min, setMin] = useState();
   const [max, setMax] = useState();
+  const [name, setName] = useState();
+  const itemsLocal = JSON.parse(localStorage.getItem('items')) || [];
   const navigate = useNavigate();
 
   const onSubmit = () => {
-    if (typeof number == "undefined" || typeof min == "undefined" || typeof max == "undefined") {
-      alert("Vui long nhap day du input.");
+    if (typeof quantity == "undefined" || typeof min == "undefined" || typeof max == "undefined"|| typeof name == "undefined") {
+      alert("Please complete all information.");
       return;
     }
     if (parseInt(max) < parseInt(min)) {
-      alert("Vui long nhap min < max");
+      alert("Please enter min less than or equal to max");
       return;
     }
-    navigate('/home', {state: {number, min, max}});
+    navigate('/home', {state: {quantity, min, max, name}});
   }
   return (
     <div className="mt-5">
       <div className="form-group row mb-2">
-        <label htmlFor="number" className="col-sm-2 col-form-label">Nhập số lượng:</label>
+        <label htmlFor="name" className="col-sm-2 col-form-label">Name:</label>
         <div className="col-sm-10">
-          <input type="number" className="form-control" name="number" id="number" value={number}
-                 onChange={e => setNumber(e.target.value)}/>
+          <input type="text" className="form-control" name="name" id="name" value={name}
+                 onChange={e => setName(e.target.value)}/>
+        </div>
+      </div><div className="form-group row mb-2">
+        <label htmlFor="quantity" className="col-sm-2 col-form-label">Quantity:</label>
+        <div className="col-sm-10">
+          <input type="number" className="form-control" name="quantity" id="quantity" value={quantity}
+                 onChange={e => setQuantity(e.target.value)}/>
         </div>
       </div>
       <div className="form-group row mb-2">
@@ -45,6 +53,7 @@ function Form() {
       <div className="form-group row d-flex justify-content-center">
         <button className="btn btn-primary col-2 offset-2" onClick={onSubmit}>Random</button>
       </div>
+      <History items={itemsLocal}/>
     </div>
   )
 }
